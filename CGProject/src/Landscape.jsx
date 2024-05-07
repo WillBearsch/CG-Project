@@ -46,7 +46,6 @@ export function Landscape(props) {
         material={materials["Material.010"]}
       />
       
-      {/* Render water planes */}
       <mesh
         position={[-2.536, 1.272, 0.79]}
         rotation={[-Math.PI * 0.5, 0, 0]}
