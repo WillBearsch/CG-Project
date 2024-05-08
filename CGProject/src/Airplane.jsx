@@ -62,9 +62,9 @@ export function Airplane(props) {
   return (
     <>
       <group ref={groupRef}>
-        <group {...props} dispose={null} scale={0.01} rotation-y={Math.PI}>
-          <mesh geometry={nodes.Plane_BasicPalette_0.geometry} material={materials['Material.005']} />
-          <mesh geometry={nodes.Propeller_BasicPalette_0.geometry} material={materials['Material.005']} ref={helixMeshRef} />
+        <group {...props} dispose={null} scale={0.01} rotation-z={Math.PI}>
+          <mesh geometry={nodes.Plane_BasicPalette_0.geometry} material={materials['BasicPalette']} />
+          <mesh geometry={nodes.Propeller_BasicPalette_0.geometry} material={materials['BasicPalette']} ref={helixMeshRef} />
         </group>
       </group>
     </>
