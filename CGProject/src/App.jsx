@@ -1,9 +1,11 @@
 import React from "react";
-import { PerspectiveCamera, Environment, OrbitControls } from "@react-three/drei";
+import { PerspectiveCamera, Environment } from "@react-three/drei";
 import { SphereEnv } from "./SphereEnv";
 import { Landscape } from "./Landscape";
 import { Airplane } from "./Airplane";
 import { Targets } from "./Targets";
+import { EffectComposer, DepthOfField, Bloom } from "@react-three/postprocessing";
+import { MotionBlur } from "./MotionBlur";
 
 function App() {
   return (
@@ -12,12 +14,10 @@ function App() {
       <Environment background={false} files={"assets/textures/sky.hdr"} />
 
       <PerspectiveCamera makeDefault position={[0, 10, 10]} />
-      {/* <OrbitControls target={[0, 0, 0]}/> */}
-
+      
       <Landscape />  
       <Airplane />
       <Targets />
-
 
       <directionalLight
         castShadow
@@ -34,6 +34,13 @@ function App() {
         shadow-camera-left={-6.2}
         shadow-camera-right={6.4}
       />
+
+      <EffectComposer>
+        <MotionBlur />
+        <Bloom />
+        <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
+      </EffectComposer>
+
     </>
   );
 }

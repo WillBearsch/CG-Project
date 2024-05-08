@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Quaternion, TorusGeometry, Vector3 } from "three";
 import { mergeBufferGeometries } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
+import { Text } from "@react-three/drei";
 import { planePosition } from "./Airplane";
 
 function randomPoint(scale) {
@@ -29,6 +30,8 @@ export function Targets() {
 
     return arr;
   });
+
+  const [score, setScore] = useState(0);
 
   const geometry = useMemo(() => {
     let geo;
@@ -67,12 +70,22 @@ export function Targets() {
     const atLeastOneHit = targets.find((target) => target.hit);
     if (atLeastOneHit) {
       setTargets(targets.filter((target) => !target.hit));
+      setScore(score + 1); // Increase score when target is hit
     }
   });
 
   return (
-    <mesh geometry={geometry}>
-      <meshStandardMaterial roughness={0.5} metalness={0.5} />
-    </mesh>
+    <>
+      <mesh geometry={geometry}>
+        <meshStandardMaterial roughness={0.5} metalness={0.5} />
+      </mesh>
+      <Text
+        position={[0, 5, -10]} // Adjust position of the text
+        color="black"
+        fontSize={2.0} // Adjust font size
+      >
+        Score: {score}
+      </Text>
+    </>
   );
 }
