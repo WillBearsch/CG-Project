@@ -29,7 +29,7 @@ export function Landscape(props) {
   });
 
   useEffect(() => {
-    const landscapeMat = materials["Material.009"];
+    const landscapeMat = materials["Material.002"];
     landscapeMat.envMapIntensity = 0.75;
   }, [materials]);
 
@@ -37,7 +37,7 @@ export function Landscape(props) {
     <group {...props} dispose={null}>
       <mesh
         geometry={nodes.landscape_gltf.geometry}
-        material={materials["Material.009"]}
+        material={materials["Material.002"]}
         castShadow
         receiveShadow
       />
