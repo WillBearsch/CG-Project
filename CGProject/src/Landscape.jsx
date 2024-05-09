@@ -26,7 +26,7 @@ export function Landscape(props) {
         reflectorOffset={0.0}
       />,
     ];
-  }, []);
+  });
 
   useEffect(() => {
     const landscapeMat = materials["Material.009"];

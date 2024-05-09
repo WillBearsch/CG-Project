@@ -4,6 +4,7 @@ import { mergeBufferGeometries } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import { planePosition } from "./Airplane";
+import * as THREE from 'three';
 
 function randomPoint(scale) {
   return new Vector3(
@@ -19,12 +20,14 @@ export function Targets() {
   const [targets, setTargets] = useState(() => {
     const arr = [];
     for (let i = 0; i < 25; i++) {
+      const isGolden = (i + 1) % 5 === 0;
       arr.push({
         center: randomPoint(new Vector3(4, 1, 4)).add(
           new Vector3(0, 2 + Math.random() * 2, 0)
         ),
         direction: randomPoint().normalize(),
         hit: false,
+        golden: isGolden,
       });
     }
 
@@ -33,9 +36,24 @@ export function Targets() {
 
   const [score, setScore] = useState(0);
 
-  const geometry = useMemo(() => {
-    let geo;
+  const normalMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      color: "green", 
+      roughness: 0.5,
+      metalness: 0.5,
+    });
+  }, []);
 
+  const goldenMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      color: "#ffd700",
+      roughness: 0.2,
+      metalness: 1,
+    });
+  }, []);
+
+  const geometries = useMemo(() => {
+    const geometries = [];
     targets.forEach((target) => {
       const torusGeo = new TorusGeometry(TARGET_RAD, 0.02, 8, 25);
       torusGeo.applyQuaternion(
@@ -45,12 +63,9 @@ export function Targets() {
         )
       );
       torusGeo.translate(target.center.x, target.center.y, target.center.z);
-
-      if (!geo) geo = torusGeo;
-      else geo = mergeBufferGeometries([geo, torusGeo]);
+      geometries.push(torusGeo);
     });
-
-    return geo;
+    return geometries;
   }, [targets]);
 
   useFrame(() => {
@@ -64,25 +79,33 @@ export function Targets() {
       const hitDist = projected.distanceTo(target.center);
       if (hitDist < TARGET_RAD) {
         target.hit = true;
+        if (target.golden) {
+          setScore(score + 10);
+        } else {
+          setScore(score + 1);
+        }
       }
     });
 
     const atLeastOneHit = targets.find((target) => target.hit);
     if (atLeastOneHit) {
       setTargets(targets.filter((target) => !target.hit));
-      setScore(score + 1); // Increase score when target is hit
     }
   });
 
   return (
     <>
-      <mesh geometry={geometry}>
-        <meshStandardMaterial roughness={0.5} metalness={0.5} />
-      </mesh>
+      {geometries.map((geometry, index) => (
+        <mesh
+          key={index}
+          geometry={geometry}
+          material={targets[index].golden ? goldenMaterial : normalMaterial}
+        />
+      ))}
       <Text
-        position={[0, 5, -10]} // Adjust position of the text
+        position={[0, 7, -10]}
         color="black"
-        fontSize={2.0} // Adjust font size
+        fontSize={2.0}
       >
         Score: {score}
       </Text>

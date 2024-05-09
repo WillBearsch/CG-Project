@@ -4,8 +4,6 @@ import { SphereEnv } from "./SphereEnv";
 import { Landscape } from "./Landscape";
 import { Airplane } from "./Airplane";
 import { Targets } from "./Targets";
-import { EffectComposer, DepthOfField, Bloom } from "@react-three/postprocessing";
-import { MotionBlur } from "./MotionBlur";
 
 function App() {
   return (
@@ -35,11 +33,7 @@ function App() {
         shadow-camera-right={6.4}
       />
 
-      <EffectComposer>
-        <MotionBlur />
-        <Bloom />
-        <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />
-      </EffectComposer>
+
 
     </>
   );
